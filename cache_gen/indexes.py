@@ -229,7 +229,9 @@ def _slug(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-") or "section"
 
 
-def build_index_html(pages: list[RenderedPage], cfg: dict) -> str:
+def build_index_html(
+    pages: list[RenderedPage], cfg: dict, logo_svg: str | None = None
+) -> str:
     cache = cfg["cache"]
     esc = html_lib.escape
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -324,7 +326,7 @@ def build_index_html(pages: list[RenderedPage], cfg: dict) -> str:
 <main class="wrap">
   <header class="masthead">
     <div class="brandline">
-      {_wordmark(brand, "dark")}
+      {_wordmark(brand, "dark", logo_svg)}
       <span class="divider"></span>
       <span class="brand-sub">LLM Cache</span>
     </div>

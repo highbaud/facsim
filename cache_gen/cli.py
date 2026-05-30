@@ -16,7 +16,7 @@ from .extract import extract
 from .enrich import Enricher
 from .render import render_page, output_paths
 from . import indexes
-from .theme import STYLESHEET
+from .theme import STYLESHEET, load_logo_svg
 
 
 def load_config(path: str) -> dict:
@@ -57,6 +57,12 @@ def build(
     out_dir = Path(output or config["output"]["dir"])
     cache_cfg = config.get("cache") or {}
     brand = cache_cfg.get("brand") or cache_cfg.get("site_name") or "LLM Cache"
+    logo_path = cache_cfg.get("logo")
+    logo_svg = load_logo_svg(logo_path)
+    if logo_path and logo_svg is None:
+        print(f"  logo: could not read SVG at '{logo_path}' — using text wordmark")
+    elif logo_svg:
+        print(f"  logo: using SVG from '{logo_path}'")
 
     if limit is not None:
         config["crawl"]["max_pages"] = limit
@@ -102,7 +108,7 @@ def build(
         enr = enricher.enrich(ext.title, ext.markdown)
         rp = render_page(
             ext, page.path, canonical, src_base,
-            enrichment=enr, section=page.section, brand=brand,
+            enrichment=enr, section=page.section, brand=brand, logo_svg=logo_svg,
         )
         rendered.append(rp)
 
@@ -122,7 +128,7 @@ def build(
 
     # index.html only if the source root wasn't itself captured at "/".
     toc_name = "cache-index.html" if "index.html" in written else "index.html"
-    write(toc_name, indexes.build_index_html(rendered, config))
+    write(toc_name, indexes.build_index_html(rendered, config, logo_svg=logo_svg))
 
     if (config.get("deploy") or {}).get("emit_htaccess", True):
         write(".htaccess", indexes.build_htaccess(config))
@@ -164,6 +170,8 @@ source:
 cache:
   base_url: "{cache_base}"
   brand: "{brand}"
+  # Optional SVG logo path (replaces the text wordmark when set). Blank = text.
+  logo: "{logo}"
   site_name: "{site_name}"
   audiences: ["GPT", "Claude", "Gemini", "Llama"]
 
@@ -248,6 +256,7 @@ def init_config(path: str = "config.yaml") -> int:
     cache_base = _ask("Cache will be served at (subdomain URL)",
                       "https://llm.example.com")
     brand = _ask('Brand name (the "X" in "X LLM Cache")', "COMPANYNAME")
+    logo = _ask("Path to an SVG logo (optional — blank for a text wordmark)", "")
 
     # site_name: a human label for the source — derive from the host by default.
     default_site = source_base.split("//", 1)[-1].strip("/")
@@ -261,6 +270,7 @@ def init_config(path: str = "config.yaml") -> int:
             sitemap_path=sitemap_path,
             cache_base=cache_base.rstrip("/"),
             brand=brand,
+            logo=logo,
             site_name=site_name,
         ),
         encoding="utf-8",

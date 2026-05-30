@@ -186,6 +186,7 @@ def render_page(
     enrichment: Enrichment = EMPTY,
     section: str = "Pages",
     brand: str = "LLM Cache",
+    logo_svg: str | None = None,
 ) -> RenderedPage:
     description_meta = (
         f'<meta name="description" content="{html_lib.escape(ext.description)}">\n'
@@ -210,7 +211,7 @@ def render_page(
         font_link=FONT_LINK,
         logo_defs=LOGO_DEFS,
         brand=html_lib.escape(brand),
-        wordmark=_wordmark(brand, "dark"),
+        wordmark=_wordmark(brand, "dark", logo_svg),
         webpage_ld=json.dumps(
             webpage_jsonld(ext.title, ext.description, canonical_url), indent=2
         ),

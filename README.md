@@ -79,11 +79,27 @@ source:
 cache:
   base_url: "https://llm.yourdomain.com"   # where this cache will be served
   brand: "COMPANYNAME"                      # wordmark — renders "COMPANYNAME LLM Cache"
+  logo: ""                                  # optional SVG logo (see below)
   site_name: "yourdomain.com"               # human-readable source label
 ```
 
 Tune `extract.content_selectors` to your site's markup, and
 `crawl.exclude_patterns` to skip what you don't want mirrored.
+
+### Logo
+
+By default the wordmark is the brand name set in the display face. To use your
+own mark instead, point `cache.logo` at an SVG file (absolute, or relative to
+where you run the build):
+
+```yaml
+cache:
+  logo: "assets/logo.svg"
+```
+
+The SVG is inlined into every page, sized to the wordmark height with its own
+colours preserved. If the file is missing or isn't a valid SVG, the build
+prints a notice and falls back to the text wordmark — it never fails.
 
 ## Build
 

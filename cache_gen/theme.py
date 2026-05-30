@@ -33,10 +33,40 @@ def _escape(text: str) -> str:
     )
 
 
-# Wordmark markup. A text wordmark set in the display face, rendered from the
-# configured brand name. `variant` is accepted for call-site compatibility
-# ("dark" on light paper, "light" on dark) but colour is handled in CSS.
-def wordmark(brand: str = "LLM Cache", variant: str = "dark") -> str:
+def load_logo_svg(path: str | None, base_dir: str = ".") -> str | None:
+    """Read an SVG logo file and return its markup, or None.
+
+    Returns None when no path is configured, the file can't be read, or the
+    contents don't look like an SVG — so the caller can fall back to the text
+    wordmark. `path` may be absolute or relative to `base_dir`.
+    """
+    if not path:
+        return None
+    from pathlib import Path
+
+    p = Path(path)
+    if not p.is_absolute():
+        p = Path(base_dir) / p
+    try:
+        svg = p.read_text(encoding="utf-8").strip()
+    except OSError:
+        return None
+    return svg if "<svg" in svg.lower() else None
+
+
+# Wordmark markup. With `logo_svg`, the supplied SVG is inlined (sized via CSS).
+# Otherwise a text wordmark is set in the display face from the brand name.
+# `variant` ("dark" on light paper, "light" on dark) selects the text colour.
+def wordmark(
+    brand: str = "LLM Cache",
+    variant: str = "dark",
+    logo_svg: str | None = None,
+) -> str:
+    if logo_svg:
+        return (
+            f'<span class="wordmark wordmark-logo" role="img" '
+            f'aria-label="{_escape(brand)}">{logo_svg}</span>'
+        )
     return (
         f'<span class="wordmark wordmark-{variant}" role="img" '
         f'aria-label="{_escape(brand)}">{_escape(brand)}</span>'
@@ -168,6 +198,14 @@ a:hover { color: var(--color-accent-ink); text-decoration: underline; text-under
   min-width: 0;
 }
 .wordmark-light { color: var(--color-paper); }
+/* Supplied SVG logo — sized to the wordmark height, intrinsic colours kept. */
+.wordmark-logo { color: inherit; }
+.wordmark-logo svg, .wordmark-logo img {
+  height: 1.85rem;
+  width: auto;
+  max-width: 100%;
+  display: block;
+}
 .brandline {
   display: flex;
   align-items: center;

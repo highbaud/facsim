@@ -25,6 +25,11 @@ cache:
   # Brand name shown in the wordmark. Renders as "<brand> LLM Cache",
   # e.g. brand "Acme" -> "Acme LLM Cache".
   brand: "COMPANYNAME"
+  # Optional path to an SVG logo (absolute, or relative to where you run the
+  # build). When set and readable, the inlined SVG replaces the text wordmark
+  # (it's sized to the wordmark height; its own colours are kept). Leave blank
+  # to use the "<brand> LLM Cache" text wordmark.
+  logo: ""
   # Human-readable label for the source site (index page / llms.txt header).
   site_name: "example.com"
   # Audiences advertised in llms.txt.
