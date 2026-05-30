@@ -1,0 +1,21 @@
+# facsim — oneshot rebuild unit.
+# Install:  cp deploy/facsim.{service,timer} /etc/systemd/system/
+#           systemctl daemon-reload && systemctl enable --now facsim.timer
+# Run once now:  systemctl start facsim.service
+# Logs:          journalctl -u facsim.service
+[Unit]
+Description=Rebuild and publish the DAG LLM cache
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+Environment=ROOT=/opt/facsim
+# Uncomment to enable the optional LLM enrichment layer (TL;DR + FAQ).
+# Better: put the key in an EnvironmentFile that is chmod 600 root-owned.
+# Environment=ANTHROPIC_API_KEY=sk-ant-...
+# EnvironmentFile=-/etc/facsim.env
+WorkingDirectory=/opt/facsim/src
+ExecStart=/usr/bin/env bash /opt/facsim/src/deploy/rebuild.sh

@@ -1,0 +1,34 @@
+/* Hallmark · DAG LLM Cache design tokens (portable)
+ * macrostructure: Stat-Led · tone: editorial-technical · anchor hue: DAG gold
+ * theme: DAG brand · warm paper / serif display (Playfair) / warm gold accent
+ * Palette + fonts mirror the DAG brand system.
+ */
+:root {
+  --color-ink:        #333232;   /* DAG primary / graphite */
+  --color-ink-soft:   #535152;   /* DAG graphite */
+  --color-ink-faint:  #7a7877;   /* DAG mid */
+  --color-paper:      #fbf5f2;   /* DAG bg */
+  --color-paper-2:    #f5ede8;   /* DAG surface */
+  --color-line:       #e2d8cd;   /* DAG line */
+  --color-line-soft:  #ede4da;   /* DAG line-soft */
+  --color-accent:     #ba9965;   /* DAG gold */
+  --color-accent-ink: #8a6a28;   /* deep gold-brown — link text (AA on paper) */
+  --color-accent-soft:#f3ead9;   /* DAG gold-bg */
+  --color-gold-deep:  #ae905c;   /* DAG gold-deep */
+  --color-focus:      #ba9965;
+
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  --space-2: 0.5rem;  --space-3: 0.75rem; --space-4: 1rem;   --space-6: 1.5rem;
+  --space-8: 2rem;    --space-12: 3rem;   --space-16: 4rem;  --space-24: 6rem;
+
+  --text-sm: 0.8125rem; --text-base: 1rem; --text-lg: 1.1875rem; --text-xl: 1.5rem;
+  --text-2xl: 2rem; --text-3xl: 2.75rem; --text-display: clamp(2rem, 7.5vw, 4.25rem);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 160ms;
+  --radius: 10px;
+  --measure: 68ch;
+}

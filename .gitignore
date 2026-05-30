@@ -1,0 +1,16 @@
+# Secrets / local environment — never commit
+.env
+.env.*
+*.local
+
+# Build output
+dist/
+dist-*/
+
+# Enrichment cache (per content-hash LLM results)
+.enrich-cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

@@ -1,0 +1,101 @@
+# facsim configuration
+# When the DAG domain is finalized, point `source.base_url` at it and run:
+#   python -m cache_gen --config config.yaml
+
+source:
+  # The live site to mirror. All same-host links are followed.
+  # NB: the apex (digitalfamilyoffice.io) 301-redirects to www, and the
+  # sitemap entries use www — so the canonical host must be www or the
+  # sitemap URLs get filtered out as off-host.
+  base_url: "https://www.digitalfamilyoffice.io"
+  # Optional extra start URLs (orphan pages) seeded into the crawl.
+  seeds: []
+  # Seed the crawl from the source's own sitemap (catches orphan pages
+  # not reachable by following links). Follows one level of sitemap index.
+  use_sitemap: true
+  # DFO is WordPress + Yoast: the real sitemap is the Yoast index
+  # (/sitemap_index.xml). /sitemaps.xml just returns an HTML page.
+  sitemap_path: "/sitemap_index.xml"
+
+cache:
+  # Public base URL where the cache will be served (the subdomain).
+  # Used for sitemap.xml loc entries and absolute links in index.html.
+  base_url: "https://llm.digitalfamilyoffice.io"
+  # Human-readable label shown on the index page / llms.txt header.
+  site_name: "digitalfamilyoffice.io"
+  # Audiences advertised in llms.txt.
+  audiences: ["GPT", "Claude", "Gemini", "Llama"]
+
+crawl:
+  max_pages: 500
+  request_delay_seconds: 0.3
+  timeout_seconds: 20
+  user_agent: "facsim/1.0 (+content cache generator)"
+  # Retry transient fetch failures (conn drops, 429/5xx) with exponential backoff.
+  max_retries: 3
+  retry_backoff_seconds: 0.5
+  # Path prefixes to skip entirely (regex, matched against the path).
+  exclude_patterns:
+    - '\.(pdf|zip|jpg|jpeg|png|gif|svg|webp|mp4|mp3|css|js|ico|woff2?)$'
+    - '^/wp-admin'
+    - '^/wp-json'
+    - '/feed/?$'
+    - '\?'   # skip query-string URLs (usually duplicates/filters)
+    # WordPress taxonomy/archive pages are thin index lists, not content —
+    # keep the cache focused on real pages, posts, docs, and products.
+    - '^/(category|tag|author)/'
+    - '^/product-(category|tag)/'
+    - '^/(product_cat|product_tag|post_tag|doc_category|extp_cat)/'
+
+extract:
+  # Skip pages whose extracted body is shorter than this (0 = keep everything).
+  # Filters out JS-only shells and near-empty stubs so the corpus stays clean.
+  min_content_words: 20
+  # CSS selectors tried in order to locate the main content. First match wins.
+  # Leave defaults for a generic site; tune once DAG's markup is known.
+  content_selectors:
+    - "main"
+    - "article"
+    - "[role=main]"
+    - "#content"
+    - ".site-content"
+    - ".entry-content"
+  # Elements removed from the extracted content before conversion.
+  strip_selectors:
+    - "nav"
+    - "header"
+    - "footer"
+    - "script"
+    - "style"
+    - "noscript"
+    - "form"
+    - ".cookie"
+    - ".cookie-banner"
+    - "[aria-hidden=true]"
+
+enrich:
+  # Optional LLM layer: a per-page TL;DR + FAQ (with FAQPage JSON-LD).
+  # OFF by default — the generator runs fully without an API key or the
+  # 'anthropic' package. When enabled, set ANTHROPIC_API_KEY in the environment
+  # and `pip install anthropic`. If either is missing the build continues
+  # without enrichment (it never fails). Results are cached per content hash,
+  # so a rebuild only bills pages whose content actually changed.
+  enabled: false
+  summary: true          # generate the TL;DR
+  faq: true              # generate the FAQ pairs
+  faq_count: 4           # max Q/A pairs per page
+  model: "claude-haiku-4-5-20251001"
+  cache_dir: ".enrich-cache"
+  max_input_chars: 12000 # truncate very long pages before the call
+
+deploy:
+  # Write a .htaccess into the output dir so Apache serves the machine files
+  # with correct content types (.md as text/markdown, .jsonl as ndjson, UTF-8
+  # everywhere) and sane caching. Harmless on other servers. The shipped Apache
+  # vhost template carries the same directives for hosts without AllowOverride.
+  emit_htaccess: true
+  cache_html_seconds: 3600    # HTML / markdown / txt / jsonl / xml freshness
+  cache_asset_seconds: 86400  # cache.css and other static assets
+
+output:
+  dir: "dist"

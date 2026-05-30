@@ -1,0 +1,44 @@
+# facsim — Apache vhost for the LLM cache subdomain.
+#
+# Copy to your Apache sites dir, replace YOURDOMAIN, then:
+#   a2ensite facsim && systemctl reload apache2
+#   certbot --apache -d llm.YOURDOMAIN.com      # adds the :443 vhost + redirect
+#
+# DocumentRoot points at the `current` symlink that rebuild.sh atomically
+# repoints to each new release, so a deploy never serves a half-written tree.
+#
+# The AddType / ExpiresByType directives below mirror what the generator writes
+# into dist/.htaccess. They are duplicated here so the cache serves correctly
+# even on hosts with `AllowOverride None` (where .htaccess is ignored).
+
+<VirtualHost *:80>
+    ServerName llm.YOURDOMAIN.com
+
+    DocumentRoot /opt/facsim/current
+
+    <Directory /opt/facsim/current>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    DirectoryIndex index.html cache-index.html
+
+    # Correct content types for the machine-readable files.
+    AddType text/markdown .md
+    AddType application/x-ndjson .jsonl
+    AddCharset utf-8 .txt .md .jsonl
+
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType text/html "access plus 3600 seconds"
+        ExpiresByType text/markdown "access plus 3600 seconds"
+        ExpiresByType application/x-ndjson "access plus 3600 seconds"
+        ExpiresByType text/plain "access plus 3600 seconds"
+        ExpiresByType application/xml "access plus 3600 seconds"
+        ExpiresByType text/css "access plus 86400 seconds"
+    </IfModule>
+
+    ErrorLog  ${APACHE_LOG_DIR}/facsim-error.log
+    CustomLog ${APACHE_LOG_DIR}/facsim-access.log combined
+</VirtualHost>

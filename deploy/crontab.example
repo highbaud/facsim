@@ -1,0 +1,12 @@
+# facsim — cron alternative to the systemd timer.
+# Install for the www-data user:  crontab -u www-data deploy/crontab.example
+# (or paste the line into `crontab -e`). Pick ONE: cron OR the systemd timer,
+# not both.
+
+# Rebuild + atomically publish daily at 04:30. ROOT tells rebuild.sh where the
+# src/ checkout and releases/ live. Drop the ANTHROPIC_API_KEY line unless you
+# want the optional TL;DR + FAQ enrichment layer.
+SHELL=/bin/bash
+ROOT=/opt/facsim
+# ANTHROPIC_API_KEY=sk-ant-...
+30 4 * * * cd /opt/facsim/src && bash deploy/rebuild.sh >> /var/log/facsim.log 2>&1
