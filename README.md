@@ -290,3 +290,10 @@ deploy/crontab.example`).
 
 Either way the schedule just runs `rebuild.sh`, so each update is an atomic
 symlink swap with a logged diff.
+
+## Author
+
+Built by Max Avery.
+
+- X / Twitter: [@realmaxavery](https://x.com/realmaxavery)
+- LinkedIn: [maxavery](https://www.linkedin.com/in/maxavery/)
