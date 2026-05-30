@@ -207,7 +207,7 @@ def build_manifest(cfg: dict, files: dict[str, str], page_count: int) -> str:
 _SECTION_ORDER = ["Pages", "Insights & Articles", "Services", "Docs",
                   "Products", "Team", "Funnels"]
 
-# Per-section emoji + one-line subtitle, mirroring the EverythingCache index
+# Per-section emoji + one-line subtitle for the index
 # (emoji-prefixed section headers with a descriptive subtitle + page count).
 _SECTION_META: dict[str, tuple[str, str]] = {
     "Pages": ("📑", "Core institutional and informational pages."),
