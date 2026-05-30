@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/facsim-logo.svg" alt="Facsim" width="220">
+</p>
+
 # facsim
 
 Generate an LLM-optimized static mirror ("cache") of a website: clean HTML +
@@ -100,6 +104,10 @@ cache:
 The SVG is inlined into every page, sized to the wordmark height with its own
 colours preserved. If the file is missing or isn't a valid SVG, the build
 prints a notice and falls back to the text wordmark — it never fails.
+
+The repo ships its own mark in `assets/` (`facsim-logo.svg` for light
+backgrounds, `facsim-logo-light.svg` for dark) if you want a reference for
+sizing and palette.
 
 ## Build
 
