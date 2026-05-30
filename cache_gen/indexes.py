@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from xml.sax.saxutils import escape as xml_escape
 
 from .render import RenderedPage, output_paths
-from .theme import FONT_LINK, DAG_LOGO_DEFS, dag_wordmark
+from .theme import FONT_LINK, LOGO_DEFS, wordmark as _wordmark
 
 
 def _tree(pages: list[RenderedPage]) -> dict:
@@ -234,6 +234,7 @@ def build_index_html(pages: list[RenderedPage], cfg: dict) -> str:
     esc = html_lib.escape
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     site_name = cache["site_name"]
+    brand = cache.get("brand") or site_name
     source_url = cfg["source"]["base_url"]
 
     # Group pages by content-type section (derived from the source sitemap).
@@ -319,11 +320,11 @@ def build_index_html(pages: list[RenderedPage], cfg: dict) -> str:
 <link rel="stylesheet" href="/cache.css">
 </head>
 <body>
-{DAG_LOGO_DEFS}
+{LOGO_DEFS}
 <main class="wrap">
   <header class="masthead">
     <div class="brandline">
-      {dag_wordmark("dark")}
+      {_wordmark(brand, "dark")}
       <span class="divider"></span>
       <span class="brand-sub">LLM Cache</span>
     </div>
@@ -463,7 +464,7 @@ def build_index_html(pages: list[RenderedPage], cfg: dict) -> str:
     <p class="fine">Mirror of <a href="{esc(source_url)}">{esc(site_name)}</a>
       &middot; {n} pages &middot; {total_words:,} words &middot; all pages
       noindex/nofollow with canonical to source &middot; built {updated} UTC.</p>
-    <p class="fine poweredby">Powered by <strong>DAG LLM Cache</strong>.</p>
+    <p class="fine poweredby">Powered by <strong><a href="https://github.com/highbaud/facsim">Facsim</a></strong>.</p>
   </div>
 </footer>
 

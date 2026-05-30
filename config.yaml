@@ -1,28 +1,32 @@
 # facsim configuration
-# When the DAG domain is finalized, point `source.base_url` at it and run:
-#   python -m cache_gen --config config.yaml
+# Quickest start:  facsim init   (interactive wizard writes this file for you)
+# Then build:      facsim --config config.yaml
 
 source:
   # The live site to mirror. All same-host links are followed.
-  # NB: the apex (digitalfamilyoffice.io) 301-redirects to www, and the
-  # sitemap entries use www — so the canonical host must be www or the
-  # sitemap URLs get filtered out as off-host.
-  base_url: "https://www.digitalfamilyoffice.io"
+  # NB: if the apex (example.com) 301-redirects to www and the sitemap entries
+  # use www, set the canonical host to www here — otherwise the sitemap URLs
+  # get filtered out as off-host.
+  base_url: "https://www.example.com"
   # Optional extra start URLs (orphan pages) seeded into the crawl.
   seeds: []
   # Seed the crawl from the source's own sitemap (catches orphan pages
   # not reachable by following links). Follows one level of sitemap index.
   use_sitemap: true
-  # DFO is WordPress + Yoast: the real sitemap is the Yoast index
-  # (/sitemap_index.xml). /sitemaps.xml just returns an HTML page.
-  sitemap_path: "/sitemap_index.xml"
+  # Path to the site's sitemap. Common values:
+  #   /sitemap.xml          plain sitemap (most sites)
+  #   /sitemap_index.xml    sitemap index (WordPress + Yoast, etc.)
+  sitemap_path: "/sitemap.xml"
 
 cache:
   # Public base URL where the cache will be served (the subdomain).
   # Used for sitemap.xml loc entries and absolute links in index.html.
-  base_url: "https://llm.digitalfamilyoffice.io"
-  # Human-readable label shown on the index page / llms.txt header.
-  site_name: "digitalfamilyoffice.io"
+  base_url: "https://llm.example.com"
+  # Brand name shown in the wordmark. Renders as "<brand> LLM Cache",
+  # e.g. brand "Acme" -> "Acme LLM Cache".
+  brand: "COMPANYNAME"
+  # Human-readable label for the source site (index page / llms.txt header).
+  site_name: "example.com"
   # Audiences advertised in llms.txt.
   audiences: ["GPT", "Claude", "Gemini", "Llama"]
 
@@ -52,7 +56,7 @@ extract:
   # Filters out JS-only shells and near-empty stubs so the corpus stays clean.
   min_content_words: 20
   # CSS selectors tried in order to locate the main content. First match wins.
-  # Leave defaults for a generic site; tune once DAG's markup is known.
+  # Leave defaults for a generic site; tune once your site's markup is known.
   content_selectors:
     - "main"
     - "article"

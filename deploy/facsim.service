@@ -4,7 +4,7 @@
 # Run once now:  systemctl start facsim.service
 # Logs:          journalctl -u facsim.service
 [Unit]
-Description=Rebuild and publish the DAG LLM cache
+Description=Rebuild and publish the LLM cache
 After=network-online.target
 Wants=network-online.target
 

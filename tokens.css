@@ -1,20 +1,19 @@
-/* Hallmark · DAG LLM Cache design tokens (portable)
- * macrostructure: Stat-Led · tone: editorial-technical · anchor hue: DAG gold
- * theme: DAG brand · warm paper / serif display (Playfair) / warm gold accent
- * Palette + fonts mirror the DAG brand system.
+/* Hallmark · LLM Cache design tokens (portable)
+ * macrostructure: Stat-Led · tone: editorial-technical · anchor hue: warm gold
+ * theme: default · warm paper / serif display (Playfair) / warm gold accent
  */
 :root {
-  --color-ink:        #333232;   /* DAG primary / graphite */
-  --color-ink-soft:   #535152;   /* DAG graphite */
-  --color-ink-faint:  #7a7877;   /* DAG mid */
-  --color-paper:      #fbf5f2;   /* DAG bg */
-  --color-paper-2:    #f5ede8;   /* DAG surface */
-  --color-line:       #e2d8cd;   /* DAG line */
-  --color-line-soft:  #ede4da;   /* DAG line-soft */
-  --color-accent:     #ba9965;   /* DAG gold */
+  --color-ink:        #333232;   /* primary / graphite */
+  --color-ink-soft:   #535152;   /* graphite */
+  --color-ink-faint:  #7a7877;   /* mid */
+  --color-paper:      #fbf5f2;   /* bg */
+  --color-paper-2:    #f5ede8;   /* surface */
+  --color-line:       #e2d8cd;   /* line */
+  --color-line-soft:  #ede4da;   /* line-soft */
+  --color-accent:     #ba9965;   /* gold */
   --color-accent-ink: #8a6a28;   /* deep gold-brown — link text (AA on paper) */
-  --color-accent-soft:#f3ead9;   /* DAG gold-bg */
-  --color-gold-deep:  #ae905c;   /* DAG gold-deep */
+  --color-accent-soft:#f3ead9;   /* gold-bg */
+  --color-gold-deep:  #ae905c;   /* gold-deep */
   --color-focus:      #ba9965;
 
   --font-display: "Playfair Display", Georgia, "Times New Roman", serif;

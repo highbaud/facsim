@@ -11,7 +11,7 @@ import markdown as md_lib
 
 from .extract import Extracted
 from .enrich import Enrichment, EMPTY
-from .theme import FONT_LINK, DAG_LOGO_DEFS, dag_wordmark
+from .theme import FONT_LINK, LOGO_DEFS, wordmark as _wordmark
 
 
 @dataclass
@@ -110,7 +110,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 {logo_defs}
 <header class="site-head wrap">
-  <a class="brandline" href="/" aria-label="DAG LLM Cache home">
+  <a class="brandline" href="/" aria-label="{brand} LLM Cache home">
     {wordmark}
     <span class="divider"></span>
     <span class="brand-sub">LLM Cache</span>
@@ -185,6 +185,7 @@ def render_page(
     source_base: str,
     enrichment: Enrichment = EMPTY,
     section: str = "Pages",
+    brand: str = "LLM Cache",
 ) -> RenderedPage:
     description_meta = (
         f'<meta name="description" content="{html_lib.escape(ext.description)}">\n'
@@ -207,8 +208,9 @@ def render_page(
         canonical=html_lib.escape(canonical_url),
         description_meta=description_meta,
         font_link=FONT_LINK,
-        logo_defs=DAG_LOGO_DEFS,
-        wordmark=dag_wordmark("dark"),
+        logo_defs=LOGO_DEFS,
+        brand=html_lib.escape(brand),
+        wordmark=_wordmark(brand, "dark"),
         webpage_ld=json.dumps(
             webpage_jsonld(ext.title, ext.description, canonical_url), indent=2
         ),

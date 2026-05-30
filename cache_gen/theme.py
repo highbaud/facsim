@@ -1,12 +1,16 @@
 """Shared visual theme for the cache front-end (served as /cache.css).
 
 Hallmark · macrostructure: Stat-Led · genre: modern-minimal (editorial serif)
-tone: editorial-technical · anchor hue: DAG gold
-theme: DAG brand (warm paper · graphite ink · gold accent · Playfair Display + Inter + IBM Plex Mono)
+tone: editorial-technical · anchor hue: warm gold
+theme: warm paper · graphite ink · gold accent · Playfair Display + Inter + IBM Plex Mono
 diversification axes: light warm paper · serif display · warm gold accent
+
+This is the default theme. It carries no brand identity of its own — the
+wordmark is rendered from the configured brand name, so a fresh install reads
+"{brand} LLM Cache" with no source-specific marks.
 """
 
-# Google Fonts link injected into every page <head>. Matches the DAG brand stack.
+# Google Fonts link injected into every page <head>.
 FONT_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -16,49 +20,45 @@ FONT_LINK = (
     "family=IBM+Plex+Mono:wght@400;500&display=swap\" rel=\"stylesheet\">"
 )
 
-# DAG wordmark — hidden <defs> block injected once per page, referenced via <use>.
-# #dag-light (paper fill, for dark backgrounds) and #dag-dark (graphite, for light).
-DAG_LOGO_DEFS = (
-    '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
-    '<symbol id="dag-light" viewBox="0 0 439.73 134.97">'
-    '<path fill="#faf7f5" d="M137.59,133.1L199.37,2.06h27.52l61.78,131.04h-29.39l-37.63-79.56c-1.25-2.5-2.43-4.99-3.56-7.49-1.12-2.5-2.19-5.02-3.18-7.58-1-2.56-1.97-5.08-2.9-7.58-.94-2.5-1.78-5.05-2.53-7.68l6.36-.19c-.75,2.87-1.62,5.62-2.62,8.24-1,2.62-2.06,5.18-3.18,7.68-1.12,2.5-2.25,4.99-3.37,7.49-1.12,2.5-2.25,5.05-3.37,7.68l-37.44,79h-28.27Z"/>'
-    '<path fill="#faf7f5" d="M439.63,73.48c-.06-1.43-.16-3.09-.28-4.96-.13-1.87-.25-3.68-.37-5.43h-51.17l-22.95,23.03h46.25c-.37,2.73-1.37,5.29-3.03,7.68-2.25,3.25-5.43,6.05-9.55,8.42-4.12,2.37-8.92,4.18-14.41,5.43-5.49,1.25-11.42,1.87-17.78,1.87s-12.92-.84-18.91-2.53-11.33-4.24-16.01-7.68c-4.68-3.43-8.39-7.83-11.14-13.2-2.75-5.36-4.12-11.67-4.12-18.91,0-5.99,1.28-11.54,3.84-16.66,2.56-5.12,6.15-9.55,10.76-13.29,4.62-3.74,10.02-6.67,16.19-8.8,6.18-2.12,12.82-3.18,19.94-3.18,5.86,0,11.39.69,16.57,2.06,5.18,1.37,10.04,3.25,14.6,5.62,4.41,2.3,8.49,4.89,12.25,7.77l6.76-6.78,11.3-11.46c-3.74-3.87-8.91-8.18-14.96-11.43-6.06-3.24-13.01-5.9-20.87-7.96-7.86-2.06-16.35-3.09-25.46-3.09-11.48,0-22.12,1.68-31.92,5.05-9.8,3.37-18.32,8.08-25.55,14.13-7.24,6.05-12.86,13.17-16.85,21.34-4,8.18-5.99,17.07-5.99,26.68,0,10.98,1.97,20.69,5.9,29.11,3.93,8.42,9.33,15.48,16.19,21.15,6.86,5.68,14.98,10.01,24.34,13.01,9.36,3,19.4,4.49,30.14,4.49,11.35,0,21.71-1.25,31.08-3.74,9.36-2.5,17.41-6.21,24.15-11.14,6.74-4.93,11.95-11.01,15.63-18.25,3.68-7.24,5.52-15.66,5.52-25.27,0-.62-.03-1.65-.09-3.09Z"/>'
-    '<path fill="#faf7f5" d="M134.41,42.4c-3.25-7.92-8.02-14.91-14.32-20.97-6.3-6.05-14.01-10.79-23.12-14.23-9.11-3.43-19.53-5.15-31.26-5.15H0v105.76l28.08-28.2V27.33h36.69c7.86,0,14.63,1.09,20.31,3.28,5.68,2.19,10.39,5.15,14.13,8.89,3.74,3.74,6.49,8.02,8.24,12.82,1.75,4.81,2.62,9.89,2.62,15.26s-.88,10.48-2.62,15.35c-1.75,4.87-4.49,9.17-8.24,12.92-3.74,3.74-8.46,6.68-14.13,8.8-5.68,2.12-12.45,3.18-20.31,3.18H28.11v.03H0v25.24h65.71c11.73,0,22.15-1.68,31.26-5.05,9.11-3.37,16.82-8.05,23.12-14.04,6.3-5.99,11.07-12.98,14.32-20.97,3.24-7.99,4.87-16.47,4.87-25.46s-1.62-17.25-4.87-25.18Z"/>'
-    '<polygon fill="#b38746" points="238.19 104.26 209.28 104.26 209.28 104.51 180.62 133.17 209.53 133.17 209.53 132.92 238.19 104.26"/>'
-    '</symbol>'
-    '<symbol id="dag-dark" viewBox="0 0 439.73 134.97">'
-    '<path fill="#333232" d="M137.59,133.1L199.37,2.06h27.52l61.78,131.04h-29.39l-37.63-79.56c-1.25-2.5-2.43-4.99-3.56-7.49-1.12-2.5-2.19-5.02-3.18-7.58-1-2.56-1.97-5.08-2.9-7.58-.94-2.5-1.78-5.05-2.53-7.68l6.36-.19c-.75,2.87-1.62,5.62-2.62,8.24-1,2.62-2.06,5.18-3.18,7.68-1.12,2.5-2.25,4.99-3.37,7.49-1.12,2.5-2.25,5.05-3.37,7.68l-37.44,79h-28.27Z"/>'
-    '<path fill="#333232" d="M439.63,73.48c-.06-1.43-.16-3.09-.28-4.96-.13-1.87-.25-3.68-.37-5.43h-51.17l-22.95,23.03h46.25c-.37,2.73-1.37,5.29-3.03,7.68-2.25,3.25-5.43,6.05-9.55,8.42-4.12,2.37-8.92,4.18-14.41,5.43-5.49,1.25-11.42,1.87-17.78,1.87s-12.92-.84-18.91-2.53-11.33-4.24-16.01-7.68c-4.68-3.43-8.39-7.83-11.14-13.2-2.75-5.36-4.12-11.67-4.12-18.91,0-5.99,1.28-11.54,3.84-16.66,2.56-5.12,6.15-9.55,10.76-13.29,4.62-3.74,10.02-6.67,16.19-8.8,6.18-2.12,12.82-3.18,19.94-3.18,5.86,0,11.39.69,16.57,2.06,5.18,1.37,10.04,3.25,14.6,5.62,4.41,2.3,8.49,4.89,12.25,7.77l6.76-6.78,11.3-11.46c-3.74-3.87-8.91-8.18-14.96-11.43-6.06-3.24-13.01-5.9-20.87-7.96-7.86-2.06-16.35-3.09-25.46-3.09-11.48,0-22.12,1.68-31.92,5.05-9.8,3.37-18.32,8.08-25.55,14.13-7.24,6.05-12.86,13.17-16.85,21.34-4,8.18-5.99,17.07-5.99,26.68,0,10.98,1.97,20.69,5.9,29.11,3.93,8.42,9.33,15.48,16.19,21.15,6.86,5.68,14.98,10.01,24.34,13.01,9.36,3,19.4,4.49,30.14,4.49,11.35,0,21.71-1.25,31.08-3.74,9.36-2.5,17.41-6.21,24.15-11.14,6.74-4.93,11.95-11.01,15.63-18.25,3.68-7.24,5.52-15.66,5.52-25.27,0-.62-.03-1.65-.09-3.09Z"/>'
-    '<path fill="#333232" d="M134.41,42.4c-3.25-7.92-8.02-14.91-14.32-20.97-6.3-6.05-14.01-10.79-23.12-14.23-9.11-3.43-19.53-5.15-31.26-5.15H0v105.76l28.08-28.2V27.33h36.69c7.86,0,14.63,1.09,20.31,3.28,5.68,2.19,10.39,5.15,14.13,8.89,3.74,3.74,6.49,8.02,8.24,12.82,1.75,4.81,2.62,9.89,2.62,15.26s-.88,10.48-2.62,15.35c-1.75,4.87-4.49,9.17-8.24,12.92-3.74,3.74-8.46,6.68-14.13,8.8-5.68,2.12-12.45,3.18-20.31,3.18H28.11v.03H0v25.24h65.71c11.73,0,22.15-1.68,31.26-5.05,9.11-3.37,16.82-8.05,23.12-14.04,6.3-5.99,11.07-12.98,14.32-20.97,3.24-7.99,4.87-16.47,4.87-25.46s-1.62-17.25-4.87-25.18Z"/>'
-    '<polygon fill="#b38746" points="238.19 104.26 209.28 104.26 209.28 104.51 180.62 133.17 209.53 133.17 209.53 132.92 238.19 104.26"/>'
-    '</symbol>'
-    '</defs></svg>'
-)
+# No embedded logo defs — the wordmark is text rendered from the brand name.
+LOGO_DEFS = ""
 
-# Wordmark markup. variant "dark" = graphite (on light paper), "light" = paper (on dark).
-def dag_wordmark(variant: str = "dark") -> str:
+
+def _escape(text: str) -> str:
     return (
-        f'<svg class="dag-wordmark" viewBox="0 0 439.73 134.97" role="img" '
-        f'aria-label="DAG"><use href="#dag-{variant}"/></svg>'
+        str(text)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
     )
 
-STYLESHEET = """/* Hallmark · macrostructure: Stat-Led · tone: editorial-technical · anchor hue: DAG gold */
+
+# Wordmark markup. A text wordmark set in the display face, rendered from the
+# configured brand name. `variant` is accepted for call-site compatibility
+# ("dark" on light paper, "light" on dark) but colour is handled in CSS.
+def wordmark(brand: str = "LLM Cache", variant: str = "dark") -> str:
+    return (
+        f'<span class="wordmark wordmark-{variant}" role="img" '
+        f'aria-label="{_escape(brand)}">{_escape(brand)}</span>'
+    )
+
+STYLESHEET = """/* Hallmark · macrostructure: Stat-Led · tone: editorial-technical · anchor hue: warm gold */
 /* Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V4 */
-/* DAG LLM Cache — shared stylesheet. Palette + fonts mirror the DAG brand
+/* LLM Cache — shared stylesheet. Default warm-paper theme
    (graphite ink, warm paper, gold accent, Playfair Display + Inter). */
 
 :root {
-  --color-ink:        #333232;   /* DAG primary / graphite */
-  --color-ink-soft:   #535152;   /* DAG graphite */
-  --color-ink-faint:  #7a7877;   /* DAG mid */
-  --color-paper:      #fbf5f2;   /* DAG bg */
-  --color-paper-2:    #f5ede8;   /* DAG surface */
-  --color-line:       #e2d8cd;   /* DAG line */
-  --color-line-soft:  #ede4da;   /* DAG line-soft */
-  --color-accent:     #ba9965;   /* DAG gold — display accents, fills, focus */
+  --color-ink:        #333232;   /* primary / graphite */
+  --color-ink-soft:   #535152;   /* graphite */
+  --color-ink-faint:  #7a7877;   /* mid */
+  --color-paper:      #fbf5f2;   /* bg */
+  --color-paper-2:    #f5ede8;   /* surface */
+  --color-line:       #e2d8cd;   /* line */
+  --color-line-soft:  #ede4da;   /* line-soft */
+  --color-accent:     #ba9965;   /* gold — display accents, fills, focus */
   --color-accent-ink: #8a6a28;   /* deep gold-brown — link text, hover (AA on paper) */
-  --color-accent-soft:#f3ead9;   /* DAG gold-bg */
-  --color-gold-deep:  #ae905c;   /* DAG gold-deep */
+  --color-accent-soft:#f3ead9;   /* gold-bg */
+  --color-gold-deep:  #ae905c;   /* gold-deep */
   --color-focus:      #ba9965;
 
   /* Card surfaces — lifted slightly off the warm paper for depth. */
@@ -155,8 +155,19 @@ a:hover { color: var(--color-accent-ink); text-decoration: underline; text-under
   border-radius: 3px;
 }
 
-/* ---- DAG wordmark ------------------------------------------------------ */
-.dag-wordmark { height: 1.85rem; width: auto; display: block; }
+/* ---- Wordmark ---------------------------------------------------------- */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  display: block;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.wordmark-light { color: var(--color-paper); }
 .brandline {
   display: flex;
   align-items: center;
@@ -173,7 +184,7 @@ a:hover { color: var(--color-accent-ink); text-decoration: underline; text-under
 }
 a.brandline { text-decoration: none; }
 a.brandline:hover { text-decoration: none; }
-a.brandline:hover .dag-wordmark { opacity: 0.82; }
+a.brandline:hover .wordmark { opacity: 0.82; }
 
 /* Per-page brand strip */
 .site-head {

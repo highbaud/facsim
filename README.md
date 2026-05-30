@@ -12,7 +12,7 @@ the real site for rankings.
 
 For every crawled page:
 
-- `path/index.html` — a clean reading view (real HTML body, DAG-branded),
+- `path/index.html` — a clean reading view (real HTML body, brand-labelled),
   with `noindex,nofollow`, canonical link, Schema.org `WebPage` +
   `BreadcrumbList` JSON-LD, a per-page meta box (word count · build date ·
   links to the markdown and source), and — when enrichment is on — a TL;DR and
@@ -54,13 +54,32 @@ pip install "facsim[enrich]"
 
 ## Configure
 
-Copy `config.yaml` and edit. The two fields you must set for a real run:
+Run the setup wizard — it asks for the site, its sitemap, and what to call the
+cache, then writes `config.yaml`:
+
+```bash
+facsim init
+```
+
+Example answers produce a cache labelled **"Acme LLM Cache"**:
+
+```
+Site to mirror (base URL):   https://www.acme.com
+Sitemap path:                /sitemap.xml
+Cache will be served at:     https://llm.acme.com
+Brand name (the "X" in "X LLM Cache"):  Acme
+```
+
+Or copy `config.yaml` and edit by hand. The fields you must set for a real run:
 
 ```yaml
 source:
   base_url: "https://www.yourdomain.com"   # the live site to mirror
+  sitemap_path: "/sitemap.xml"             # path to the site's sitemap
 cache:
   base_url: "https://llm.yourdomain.com"   # where this cache will be served
+  brand: "COMPANYNAME"                      # wordmark — renders "COMPANYNAME LLM Cache"
+  site_name: "yourdomain.com"               # human-readable source label
 ```
 
 Tune `extract.content_selectors` to your site's markup, and

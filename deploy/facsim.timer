@@ -2,7 +2,7 @@
 # Pairs with facsim.service. Persistent=true catches up a missed run
 # (e.g. the box was off at the scheduled time).
 [Unit]
-Description=Daily rebuild of the DAG LLM cache
+Description=Daily rebuild of the LLM cache
 
 [Timer]
 OnCalendar=*-*-* 04:30:00
